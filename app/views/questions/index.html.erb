@@ -1,0 +1,35 @@
+<%= form_tag(questions_search_path, id: "form") do %>
+	<input type="text" name="query">
+	<input type="submit" value="Filter" name="">
+<% end %>
+
+<div id="container">
+		--------------------------<br>
+	<% @questions.each do |q| %>
+		<%= q.title %><br>
+		<%= q.description %><br>
+		--------------------------<br>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	$("#form").on("submit", function(e) {
+		e.preventDefault()
+		$.ajax({
+			url: $("#form").attr("action"),
+			type: $("#form").attr("method"),
+			data: $("#form").serialize(),
+			success: function(data) {
+				let audio = new Audio("https://www.myinstants.com/media/sounds/139-item-catch.mp3")
+				audio.play()
+				$("#container").html("")
+				html = "--------------------------<br>"
+				for (let i = 0; i < data.length; i++) {
+					// render data into html
+					html = html + `${data[i].title}<br>${data[i].description}<br>--------------------------<br>`
+				}
+				$("#container").html(html)
+			}
+		})
+	})
+</script>
